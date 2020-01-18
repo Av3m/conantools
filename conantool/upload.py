@@ -4,6 +4,8 @@ import subprocess
 import tempfile
 import os
 import json
+from .common.utils import *
+from .common.globals import *
 
 def parse_args():
     parser = argparse.ArgumentParser(description='upload a package and ALL its dependencies to a remote server')
@@ -25,6 +27,7 @@ def parse_args():
 
     args = parser.parse_args()
     return args
+
 
 def get_packages(json_data):
     output = []
@@ -63,8 +66,6 @@ def get_packages(json_data):
         if not _is_ref:
             continue
 
-    
-
         if _ref == None or _ref == "" or _id == None or _id == "":
             print("ERROR: parsing error of json content")
             print(_ref, _id, _binary, _recipe)
@@ -82,6 +83,7 @@ def get_packages(json_data):
         exit(1)
     
     return output
+
 
 def upload_packages(packages, args):
     upload_cmd = ['conan', 'upload']
@@ -118,45 +120,33 @@ def upload_packages(packages, args):
         if not args.dry_run:
             subprocess.check_call(cmd)
 
-    
-        
-
-
-
-        
 
 if __name__ == "__main__":
+    check_python3()
     args = parse_args()
 
     json_file = tempfile.mkstemp()[1]
-    
 
-    print(args.options)
-
-    infocmd = ['conan', 'info', args.reference, '-j', json_file]
+    info_command = ['conan', 'info', args.reference, '-j', json_file]
     if args.profile:
-        infocmd += ['-pr', args.profile]
+        info_command += ['-pr', args.profile]
 
     if args.options:
         for i in args.options:
-            infocmd += ['-o', i]
+            info_command += ['-o', i]
 
     if args.settings:
         for i in args.settings:
-            infocmd += ['-s', i]
+            info_command += ['-s', i]
 
     if args.env:
         for i in args.env:
-            infocmd += ['-e', i]
-    
+            info_command += ['-e', i]
 
-    subprocess.check_call(infocmd)
+    subprocess.check_call(info_command)
 
     with open(json_file,'rb') as f:
         jsonData = json.load(f)
-
-    
-    print(json.dumps(jsonData, indent=4))
 
     upload_packages(get_packages(jsonData), args)
     os.remove(json_file)

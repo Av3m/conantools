@@ -8,41 +8,10 @@ import json
 import re
 import argparse
 import pkg_resources
+import logging
 
-
-conan_profile_path = ""
-python_exe = ""
-conan_exe = ""
-conan_user_path = ""
-
-
-def compute_globals():
-    global conan_profile_path
-    global python_exe
-    global conan_exe
-    global conan_user_path
-
-    if os.getenv('PYTHON_EXE'):
-        python_exe = os.getenv('PYTHON_EXE')
-    else:
-        python_exe = sys.executable
-
-    if os.getenv('CONAN_EXE'):
-        conan_exe = os.getenv('CONAN_EXE')
-    else:
-        conan_exe = "conan"
-
-    # get conan user home
-    if os.getenv("CONAN_USER_HOME"):
-        conan_user_path = os.path.join(os.environ['CONAN_USER_HOME'], ".conan")
-    else:
-        conan_user_path = os.path.join(os.path.expanduser("~"), ".conan")
-
-    print("python executable: ", python_exe)
-    print("conan executable: ", conan_exe)
-    print("conan user home: ", conan_user_path)
-
-    conan_profile_path = os.path.join(conan_user_path, "profiles")
+from .common.utils import *
+from .common.globals import *
 
 
 def parse_args():
@@ -69,14 +38,6 @@ def get_conan_version(conan_exe):
         return m.group(1)
     else:
         return None
-
-
-def conan_works(conan_exe):
-    try:
-        subprocess.check_call([conan_exe, "remote", "list"])
-        return True
-    except:
-        return False
 
 
 def is_existing_remote(conan_user_path, remote_url):
@@ -158,6 +119,7 @@ def get_conan():
 
 def pip_exec(json_data, pip_args):
     args = [python_exe, "-m", "pip"] + pip_args + json_data["python_pip_args"]
+    print("executing command: \"{}\"".format(" ".join(args)))
     subprocess.check_call(args)
 
 
@@ -196,9 +158,7 @@ def load_config_json(working_dir):
 
 
 def main():
-    if not sys.version_info >= (3,):
-        raise RuntimeError("python 3.x strictly required for this script. please install python3 on your platform.")
-
+    check_python3()
     compute_globals()
     args = parse_args()
 
