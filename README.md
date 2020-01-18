@@ -1,10 +1,10 @@
-#Conan Tools
+#Conan Utils
 useful utils for dealing with conan.io package manager
 
 ### Installation
 Install latest version via pip:
 ```
-python -m pip install conantools
+python -m pip install conanutils
 ```
 
 ## Features
@@ -23,7 +23,7 @@ Example
 conan install qt5/5.13.2@bincrafters/stable --build=missing -pr MyAwesomeProfile
 
 #this tool will upload your whole dependency tree to your conan server
-python -m conantools.upload -r YourServer qt5/5.13.2@bincrafters/stable 
+python -m conanutils.upload -r YourServer qt5/5.13.2@bincrafters/stable 
 
 ```
 
@@ -39,14 +39,14 @@ configured exactly as intended.
 Example
 ```
 #create a new configuration
-python -m conantools.config --new /path/to/new/JsonFile.json
+python -m conanutils.config --new /path/to/new/JsonFile.json
 
 #adept the file to your needs and share it with your team members ( e.g. version it directly 
 with your project ) 
 
 #all other developers execute the following command after every change of the config:
 #this will apply all defined settings in the config.
-python -m conantools.config /path/to/the/JsonFile.json
+python -m conanutils.config /path/to/the/JsonFile.json
 
 
 ```

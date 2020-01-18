@@ -164,7 +164,7 @@ def main():
 
     if args.new:
         print("creating new config from template")
-        template_file = pkg_resources.resource_filename("conantools", "/templates/install_config.json.template")
+        template_file = pkg_resources.resource_filename("conanutils", "/templates/install_config.json.template")
 
         with open(template_file, 'r') as fin:
             with open(args.config, 'w+') as f:

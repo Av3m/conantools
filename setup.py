@@ -1,10 +1,10 @@
 from distutils.core import setup
 
 setup(
-    name='ConanTools',
+    name='ConanUtils',
     version='0.1.0',
-    packages=['conantools'],
-    package_data={'conantools': ['templates/*.template']},
+    packages=['conanutils'],
+    package_data={'conanutils': ['templates/*.template']},
     license='MIT',
     long_description="additional Toolbox for conan.io C/C++ package manager",
     url="https://github.com/Av3m/conantools",
