@@ -63,8 +63,15 @@ def add_remote(conan_exe, json_data):
             continue
 
         print("add %s (url: %s)" % (remote[0], remote[1]["url"]))
-        subprocess.check_call("conan remote add -i 0 %s %s" % (remote[0], remote[1]["url"]))
-        subprocess.check_call("conan user -r %s %s -p %s" % (remote[0], remote[1]["user"], remote[1]["pass"]))
+
+        user = remote[1].get("user",None)
+        passwd = remote[1].get("pass",None)
+        
+        subprocess.check_call(["conan", "remote", "add", "-i", "0", remote[0], remote[1]["url"]])
+        if user is not None and passwd is not None:
+            subprocess.check_call(["conan", "user", "-r", remote[0], remote[1]["user"], "-p", remote[1]["pass"]])
+        else:
+            subprocess.check_call(["conan", "user", "-r", remote[0], "-s"])
 
 
 def write_settings(p_file, settings):
