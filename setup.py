@@ -1,9 +1,9 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name='ConanUtils',
-    version='0.1.2',
-    packages=['conanutils'],
+    version='0.1.3',
+    packages=find_packages(),
     package_data={'conanutils': ['templates/*.template']},
     license='MIT',
     long_description="additional Toolbox for conan.io C/C++ package manager",
